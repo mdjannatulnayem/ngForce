@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 
-Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+Log.Logger = new LoggerConfiguration().MinimumLevel.Fatal()
     .WriteTo.File("Logs/Engine-diary-.txt",rollingInterval:RollingInterval.Hour).CreateLogger();
 
 builder.Host.UseSerilog();
@@ -37,7 +37,7 @@ app.MapGet("ngforce/engine/{force:double}", (double force,ILogger<Program> _logg
         {
             stringBuilder.AppendLine($"{f}");
         }
-        _logger.Log(LogLevel.Debug,stringBuilder.ToString());
+        _logger.Log(LogLevel.Critical,stringBuilder.ToString());
     }
     return StatusCodes.Status201Created;
 });
