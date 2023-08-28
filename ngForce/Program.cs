@@ -103,6 +103,6 @@ app.Run();
 static class ngForce_DataModel
 {
     public static bool Ignition { get; set; } = false;
-    public static int BlockSize { get; set; } = 10;
+    public static int BlockSize { get; set; } = 100;
     public static List<double> EngineForce { get; set; } = new();
 }
