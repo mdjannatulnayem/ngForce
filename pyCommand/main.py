@@ -38,6 +38,6 @@ while True:
         print("// Terminated!")
         break
     if (keyboard.is_pressed('P') or keyboard.is_pressed('p')):
-        last100 = get_data_from_api(api_route + "/ngforce/engine")
+        last100 = get_data_from_api(api_route+'/ngforce/engine')
         plt.plot(range(1,len(last100)+1),last100)
         plt.show()
