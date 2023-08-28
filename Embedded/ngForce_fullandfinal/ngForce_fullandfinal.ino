@@ -5,10 +5,12 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
+#include "appsettings.h"
+
 const int trig = 5;
 // Replace with your WiFi credentials
-const char* ssid = "Circuit";
-const char* password = "ekds6118";
+const char* ssid = _ssid;
+const char* password = _password;
 
 const int HX711_sck = 2; //mcu > HX711 sck pin
 const int HX711_dout = 4; //mcu > HX711 dout pin
@@ -22,8 +24,9 @@ const int calVal_eepromAdress = 0;
 void updateServer(String url){
   WiFiClient client;
   HTTPClient httpclient;
-  // Start the HTTP request with WiFi client and URL
+  httpclient.addHeader("x-api-key",String(_key));
   httpclient.begin(client, url);
+  // Start the HTTP request with WiFi client and URL
   int httpResponseCode = httpclient.GET(); // Send the GET request
   httpclient.end(); 
 }
@@ -85,15 +88,16 @@ void loop() {
   // Set up WiFi client and HTTPClient
   WiFiClient client;
   HTTPClient httpclient;
-
+  httpclient.addHeader("x-api-key",String(_key));
+  
   if(reading < 0) reading = 0.0; // avoid negative readings!
 
   String url;
   if(ignition == false){
-    url = "http://192.168.43.138:5080/ngforce/ignition/";
+    url = String(_endpoint1);
   }
   else{
-    url =  "http://192.168.43.138:5080/ngforce/engine/" + String(reading);
+    url =  String(_endpoint2) + String(reading);
   }
 
   // Start the HTTP request with WiFi client and URL
@@ -121,7 +125,7 @@ void loop() {
       ignition = false;
       digitalWrite(trig,LOW);
       c = 0;
-      updateServer("http://192.168.43.138:5080/ngforce/ignition/0");
+      updateServer(String(_endpoint3));
     }
     
   } else {
